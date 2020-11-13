@@ -1,0 +1,22 @@
+﻿  main.cpp
+c:\users\bronj\source\repos\pool table - computer graphics\mesh.h(88): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(99): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(100): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(101): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(227): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(246): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(350): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(361): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(363): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(371): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(373): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(521): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(576): warning C4101: 'xpos': unreferenced local variable
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(576): warning C4101: 'ypos': unreferenced local variable
+soil.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_DXT.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
+soil.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_helper.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
+soil.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(SOIL.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
+soil.lib(stb_image_aug.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(stb_image_aug.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
+  Pool Table - Computer Graphics.vcxproj -> C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\Pool Table - Computer Graphics.exe
+  Pool Table - Computer Graphics.vcxproj -> C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\Pool Table - Computer Graphics.pdb (Full PDB)
+          1 file(s) copied.
