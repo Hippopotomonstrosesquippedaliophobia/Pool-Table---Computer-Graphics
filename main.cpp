@@ -82,7 +82,7 @@ GLfloat currentFrame;
 // Light attributes
 glm::vec3 lightPos(0,0,0);      // Light location
 glm::vec3 lightColor(1.0f, 1.0f, 1.0f);             // White light
-glm::vec3 lightMode(2.0f);
+glm::vec3 lightMode(2.0f); //2 is diffuse lighting, 1 is global light, 4 mix of all
 
 //Variables increments for resetting the camera's coordinates
 GLfloat xVal = 700.0f;
@@ -102,7 +102,7 @@ struct objects
 
     GLfloat angle = 0.0f;
     GLfloat inc = 0.001f;
-} ballObj, cueObj, cuetipObj, tableObj, containerObj;
+} ballObj, cueObj, cuetipObj, tableObj, ball2Obj;
 
 //Mouse
 double oldX, oldY;
@@ -125,6 +125,7 @@ GLfloat radius = 20.0f;            // ball radius
 GLfloat offset = 1.5f;
 
 bool hit = true;
+bool hit2 = true;
 
 GLfloat OGcueZ = 50.0f;
 GLfloat OGcueY = 40.0f;
@@ -134,6 +135,11 @@ GLfloat OGballz = 43.0f;
 GLfloat OGballx = 0.0f;
 GLfloat OGballzinc = -2.0;
 GLfloat OGballxinc = -1.0;
+
+GLfloat OGball2z = -30.0f;
+GLfloat OGball2x = -35.0f;
+GLfloat OGball2zinc = 1.5;
+GLfloat OGball2xinc = 1.4;
 
 void init_Resources()
 {
@@ -196,7 +202,8 @@ int main()
     // =======================================================================
     // Step 2. Load the model objects
     // =======================================================================
-    Model ball((GLchar*)"objects/ball.obj");        
+    Model ball((GLchar*)"objects/ball.obj");    
+    Model ball2((GLchar*)"objects/ball2.obj");
     Model table((GLchar*)"objects/pooltable.obj"); //CREDIT: https://free3d.com/3d-model/pool-table-v1--600461.html
     Model cue((GLchar*)"objects/poolcue.obj"); //CREDIT: https://free3d.com/3d-model/pool-cue-v1--229730.html
     Model lamp((GLchar*)"objects/lamp.obj"); //CREDIT: https://free3d.com/3d-model/punct-pendant-lamp-86726.html
@@ -227,11 +234,20 @@ int main()
     srand(glfwGetTime()); // initialize random seed
 
     //Initializing location of objects
-    ballObj.x = OGballx; // was 0
-    ballObj.z = OGballz; // was 10 for middle
-
+    //ballObj.x = OGballx; // was 0
+    //ballObj.z = OGballz; // was 10 for middle
+    ballObj.z = OGballz;
+    ballObj.x = OGballx;
+    ballObj.zinc = OGballzinc;
     ballObj.xinc = OGballxinc;
-    ballObj.zinc = OGballxinc;
+
+    ball2Obj.z = OGball2z;
+    ball2Obj.x = OGball2x;
+    ball2Obj.zinc = OGball2zinc;
+    ball2Obj.xinc = OGball2xinc;
+
+    hit = true;
+    hit2 = false;
 
     //cue
     cueObj.z = OGcueZ;
@@ -352,33 +368,48 @@ int main()
                 hit = false;
             }
         }
-            
+          
+        //BALL 1
         if (ballObj.x >= tableright || ballObj.x <= tableleft)
         {
             ballObj.xinc *= -1;
+
+            if (ballObj.x > 0)
+                ballObj.x = tableright;
+            if (ballObj.x < 0)
+                ballObj.x = tableleft;
+
             //Decay movement of ball
             if (ballObj.xinc < 0)
-                ballObj.xinc = ballObj.xinc + (ballObj.xinc * 0.10);
+                ballObj.xinc = ballObj.xinc + (ballObj.xinc * 0.18);
             if (ballObj.xinc > 0)
-                ballObj.xinc = ballObj.xinc - (ballObj.xinc * 0.10);
+                ballObj.xinc = ballObj.xinc - (ballObj.xinc * 0.18);
         }
         if (ballObj.z >= tablefront || ballObj.z <= tableback)
         {
             ballObj.zinc *= -1;
 
+            if (ballObj.z > 0)
+                ballObj.z = tablefront;
+            if (ballObj.z < 0)
+                ballObj.z = tableback;
+
             //Decay movement of ball
             if (ballObj.zinc < 0)
-                ballObj.zinc = ballObj.zinc + (ballObj.zinc * 0.50);
+                ballObj.zinc = ballObj.zinc + (ballObj.zinc * 0.30);
             if (ballObj.zinc > 0)
-                ballObj.zinc = ballObj.zinc - (ballObj.zinc * 0.50);
+                ballObj.zinc = ballObj.zinc - (ballObj.zinc * 0.30);
 
-            cout << ballObj.xinc << " " << ballObj.zinc;
+            //cout << ballObj.xinc << " " << ballObj.zinc;
         }
+
+        
+
 
         //cout << "ball x " << ballObj.x << " y " << ballObj.y << " z " << ballObj.z << "|" << endl;
         //ballShader.Use();
 
-        glm::mat4 ballModel;
+        glm::mat4 ballModel, ball2Model;
 
         /*ballObj.x += ballObj.xinc;*/
         
@@ -386,19 +417,89 @@ int main()
         {
             ballObj.z += ballObj.zinc;
             ballObj.x += ballObj.xinc;
+
+            
+
+
+            if (hit2)
+            {
+                //BALL 2
+                if (ball2Obj.x >= tableright || ball2Obj.x <= tableleft)
+                {
+                    ball2Obj.xinc *= -1;
+
+                    if (ball2Obj.x > 0)
+                        ball2Obj.x = tableright;
+                    if (ball2Obj.x < 0)
+                        ball2Obj.x = tableleft;
+
+                    //Decay movement of ball
+                    if (ball2Obj.xinc < 0)
+                        ball2Obj.xinc = ball2Obj.xinc + (ball2Obj.xinc * 0.18);
+                    if (ball2Obj.xinc > 0)
+                        ball2Obj.xinc = ball2Obj.xinc - (ball2Obj.xinc * 0.18);
+                }
+                if (ball2Obj.z >= tablefront || ball2Obj.z <= tableback)
+                {
+                    ball2Obj.zinc *= -1;
+
+                    if (ball2Obj.z > 0)
+                        ball2Obj.z = tablefront;
+                    if (ball2Obj.z < 0)
+                        ball2Obj.z = tableback;
+
+                    //Decay movement of ball
+                    if (ball2Obj.zinc < 0)
+                        ball2Obj.zinc = ball2Obj.zinc + (ball2Obj.zinc * 0.30);
+                    if (ball2Obj.zinc > 0)
+                        ball2Obj.zinc = ball2Obj.zinc - (ball2Obj.zinc * 0.30);
+                }
+
+                ball2Obj.x += ball2Obj.xinc;
+                ball2Obj.z += ball2Obj.zinc;
+            }
+
+            GLfloat xdif = ballObj.x - ball2Obj.x;
+            GLfloat zdif = ballObj.z - ball2Obj.z;
+            GLfloat ydif = ballObj.y - ball2Obj.y;
+
+            if (sqrt((xdif * xdif) + (ydif * ydif) + (zdif * zdif)) < 5) //(ballObj.Radius + ball2Obj.Radius))
+            {
+                // Once collided, repel and swap speed of translation.
+                GLfloat temp = ball2Obj.xinc;
+                ball2Obj.xinc = (ball2Obj.xinc * 0.90) * -1;
+                ballObj.xinc = (ballObj.xinc * 0.85) * -1;
+
+                temp = ball2Obj.zinc;
+                ball2Obj.zinc = (ball2Obj.zinc * 0.85 ) * -1;
+                ballObj.zinc = (ballObj.zinc * 0.80) * -1;
+
+                hit2 = true;
+            }
+
             hit = false;
         }
 
         ballModel = glm::mat4(1);        
+        ball2Model = glm::mat4(1);
 
-        ballModel = glm::scale(ballModel, glm::vec3(5.0f));
+        ballModel = glm::scale(ballModel, glm::vec3(5.0f)); 
+        ball2Model = glm::scale(ball2Model, glm::vec3(5.0f));
+
         ballModel = glm::translate(ballModel, glm::vec3(ballObj.x, tableTop, ballObj.z));
+        ball2Model = glm::translate(ball2Model, glm::vec3(ball2Obj.x, tableTop, ball2Obj.z));
 
-        cout << "BALL " << ballObj.x << " " << ballObj.y << " " << ballObj.z << endl;
+        //cout << "BALL " << ballObj.x << " " << ballObj.y << " " << ballObj.z << endl;
         // ...and 2. The Model matrix
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(ballModel));
+
         ball.Draw(lightShader);
-       
+
+        
+        
+        glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(ball2Model));
+        ball2.Draw(lightShader);
+
         lightShader.Use();
 
         //==========================================================================
@@ -460,7 +561,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         ballObj.x = OGballx;
         ballObj.zinc = OGballzinc;
         ballObj.xinc = OGballxinc;
+
+        ball2Obj.z = OGball2z;
+        ball2Obj.x = OGball2x;
+        ball2Obj.zinc = OGball2zinc;
+        ball2Obj.xinc = OGball2xinc;
+
         hit = true;
+        hit2 = false;
     }
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -473,7 +581,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         camLocation.y -= yVal;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        cout << "pressed w : " <<camLocation.z << " |";
+        //cout << "pressed w : " <<camLocation.z << " |";
         camLocation.z -= zVal;
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -510,7 +618,7 @@ void clicked_callback(GLFWwindow* window, int button, int  action, int mode)
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) //Mouse Clicked
     {
         glfwGetCursorPos(window, &xpos, &ypos);
-        cout << "Old x[" << oldX << "]y[" << oldY << "] - >New x[" << xpos << "]y[" << ypos << "] 22222222" << endl;
+        //cout << "Old x[" << oldX << "]y[" << oldY << "] - >New x[" << xpos << "]y[" << ypos << "] 22222222" << endl;
         oldX = xpos;
         oldY = ypos;
 
@@ -539,7 +647,7 @@ void clicked_callback(GLFWwindow* window, int button, int  action, int mode)
                 cueObj.z -= 2.0f;
         }
 
-        cout << "Released : Cursor Position at (" << xpos << " : " << ypos << ")" << endl;
+        //cout << "Released : Cursor Position at (" << xpos << " : " << ypos << ")" << endl;
     }
 }
 
@@ -560,7 +668,7 @@ void clickDrag_callback(GLFWwindow* window, double xPos, double yPos)
 
             }
 
-            cout << "Released : Cursor Position at (" << xPos << " : " << yPos << ")" << endl;
+            //cout << "Released : Cursor Position at (" << xPos << " : " << yPos << ")" << endl;
 
             firstMouse = false; //Let program know mouse is released
 

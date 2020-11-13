@@ -10,6 +10,7 @@ newmtl wire_228184153
 	Ka 0.8941 0.7216 0.6000
 	Kd 0.8941 0.7216 0.6000
 	Ks 0.3500 0.3500 0.3500
+	map_Kd objects/textures/lights.jpg
 
 newmtl wire_086086086
 	Ns 32
@@ -20,6 +21,7 @@ newmtl wire_086086086
 	Ka 0.3373 0.3373 0.3373
 	Kd 0.3373 0.3373 0.3373
 	Ks 0.3500 0.3500 0.3500
+	map_Kd objects/textures/lights.jpg
 
 newmtl wire_227153153
 	Ns 32
@@ -30,7 +32,8 @@ newmtl wire_227153153
 	Ka 0.8902 0.6000 0.6000
 	Kd 0.8902 0.6000 0.6000
 	Ks 0.3500 0.3500 0.3500
-
+	map_Kd objects/textures/lights.jpg
+	
 newmtl wire_154185229
 	Ns 32
 	d 1
@@ -40,7 +43,8 @@ newmtl wire_154185229
 	Ka 0.6039 0.7255 0.8980
 	Kd 0.6039 0.7255 0.8980
 	Ks 0.3500 0.3500 0.3500
-
+	map_Kd objects/textures/lights.jpg
+	
 newmtl wire_225198087
 	Ns 32
 	d 1
@@ -50,7 +54,8 @@ newmtl wire_225198087
 	Ka 0.8824 0.7765 0.3412
 	Kd 0.8824 0.7765 0.3412
 	Ks 0.3500 0.3500 0.3500
-
+	map_Kd objects/textures/lights.jpg
+	
 newmtl wire_088199225
 	Ns 32
 	d 1
@@ -60,3 +65,4 @@ newmtl wire_088199225
 	Ka 0.3451 0.7804 0.8824
 	Kd 0.3451 0.7804 0.8824
 	Ks 0.3500 0.3500 0.3500
+	map_Kd objects/textures/lights.jpg
