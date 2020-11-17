@@ -1,21 +1,9 @@
-// ==============================================================================
-//  PROGRAM:
-//  Pool Table
-// ==============================================================================
+/*
+//==============================================================================
+//                                PROGRAM:
+//                                Pool Table
+//==============================================================================
 
-// ==============================================================================
-//  Steps to create the MVP:
-//    1.  Setup and compile our shaders as an object of the Shader class.
-//    2.  Load the geometrical model objects.
-//    3.  Create the projection matrix.
-//    4.  Create the view matrix
-//    5.  Create the model matrix – initially as an identity matrix and
-//        then modify with scaling, translation, rotation, etc, if required.
-//    6.  Pass the model, view and projection matrices to the shaders.
-//    7.  Draw the object.
-//
-// ==============================================================================
-/*============================================================================= =
 Install the following in Package Manager :
 
 Install-Package glew_dynamic
@@ -27,6 +15,7 @@ Install-Package Soil
 Install-Package Assimp -version 3.0.0
 
 =================================================================================*/
+
 // GLEW
 #include <GL/glew.h>
 
@@ -44,7 +33,6 @@ Install-Package Assimp -version 3.0.0
 #include "model.h"
 
 //========= Prototype function for call back ===============================
-//Keyboard callback for Functions like closing etc
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 void windowSize_callback(GLFWwindow* window, int width, int height);
@@ -52,8 +40,6 @@ void windowSize_callback(GLFWwindow* window, int width, int height);
 void clicked_callback(GLFWwindow* window, int button, int  action, int mode);
 
 void clickDrag_callback(GLFWwindow* window, double xPos, double yPos);
-
-void moveMouse_callback(GLFWwindow* window, double xPos, double yPos);
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 //==========================================================================
@@ -72,12 +58,7 @@ glm::vec3 camLocation = originalLocation;
 
 //Camera
 Camera camera(camLocation);
-glm::mat4 View, lightView;
-
-// Deltatime - for camera movement
-GLfloat deltaTime = 0.0f;    // Time between current frame and last frame
-GLfloat lastFrame = 0.0f;    // Time of last frame
-GLfloat currentFrame;
+glm::mat4 View;
 
 // Light attributes
 glm::vec3 lightPos(0,0,0);      // Light location
@@ -166,8 +147,7 @@ void init_Resources()
 
     glfwSetMouseButtonCallback(window, clicked_callback);
 
-    //glfwSetCursorPosCallback(window, clickDrag_callback);//was acting up
-    glfwSetCursorPosCallback(window, moveMouse_callback);
+    glfwSetCursorPosCallback(window, clickDrag_callback);
 
     glfwSetScrollCallback(window, scroll_callback);
 
@@ -186,56 +166,10 @@ int main()
     init_Resources();
 
     // ==============================================
-    // ====== Set up the stuff for our Objects =======
+    // ====== Set up our Objects =======
     // ==============================================
     tableObj.y = 0; //Reset Table Y Axis Since its sitting on the floor
 
-    // =======================================================================
-    // Step 1. Setup and compile our shaders as an object of the Shader class
-    // =======================================================================
-   /* Shader ballShader("objects/ballVertex.glsl", "objects/ballFragment.glsl");
-    Shader tableShader("objects/pooltableVertex.glsl", "objects/pooltableFragment.glsl");
-    Shader cueShader("objects/poolcueVertex.glsl", "objects/poolcueFragment.glsl");*/
-    Shader lampShader("objects/lampVertex.glsl", "objects/lampFragment.glsl");
-    Shader lightShader("objects/lightVertex.glsl", "objects/lightFragment.glsl");
-
-    // =======================================================================
-    // Step 2. Load the model objects
-    // =======================================================================
-    Model ball((GLchar*)"objects/ball.obj");    
-    Model ball2((GLchar*)"objects/ball2.obj");
-    Model table((GLchar*)"objects/pooltable.obj"); //CREDIT: https://free3d.com/3d-model/pool-table-v1--600461.html
-    Model cue((GLchar*)"objects/poolcue.obj"); //CREDIT: https://free3d.com/3d-model/pool-cue-v1--229730.html
-    Model lamp((GLchar*)"objects/lamp.obj"); //CREDIT: https://free3d.com/3d-model/punct-pendant-lamp-86726.html
-
-    // =======================================================================
-    // Step 3. Set the projection matrix
-    // =======================================================================
-    glm::mat4 projection = glm::perspective(45.0f, (GLfloat)sWidth / (GLfloat)sHeight, 1.0f, 10000.0f);
-
-    /*ballShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(ballShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    tableShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(tableShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    cueShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(cueShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));*/
-
-    lightShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    // Define how and where the data will be passed to the shaders
-    GLint lightPos = glGetUniformLocation(lightShader.Program, "lightPos");
-    GLint viewPos = glGetUniformLocation(lightShader.Program, "viewPos");
-    GLint lightCol = glGetUniformLocation(lightShader.Program, "lightColor");
-    GLint lightType = glGetUniformLocation(lightShader.Program, "lightType");
-
-    srand(glfwGetTime()); // initialize random seed
-
-    //Initializing location of objects
-    //ballObj.x = OGballx; // was 0
-    //ballObj.z = OGballz; // was 10 for middle
     ballObj.z = OGballz;
     ballObj.x = OGballx;
     ballObj.zinc = OGballzinc;
@@ -254,15 +188,55 @@ int main()
     cueObj.y = OGcueY;
     cueObj.x = OGcueX;
 
+    // =======================================================================
+    // Shaders
+    // =======================================================================
+   /* Shader ballShader("objects/ballVertex.glsl", "objects/ballFragment.glsl");
+    Shader tableShader("objects/pooltableVertex.glsl", "objects/pooltableFragment.glsl");
+    Shader cueShader("objects/poolcueVertex.glsl", "objects/poolcueFragment.glsl");*/
+    Shader lampShader("objects/lampVertex.glsl", "objects/lampFragment.glsl");
+    Shader lightShader("objects/lightVertex.glsl", "objects/lightFragment.glsl");
 
+    // =======================================================================
+    // Models
+    // =======================================================================
+    Model ball((GLchar*)"objects/ball.obj");    //Cue ball
+    Model ball2((GLchar*)"objects/ball2.obj"); //Ball to hit
+    Model table((GLchar*)"objects/pooltable.obj"); //CREDIT: https://free3d.com/3d-model/pool-table-v1--600461.html
+    Model cue((GLchar*)"objects/poolcue.obj"); //CREDIT: https://free3d.com/3d-model/pool-cue-v1--229730.html
+    Model lamp((GLchar*)"objects/lamp.obj"); //CREDIT: https://free3d.com/3d-model/punct-pendant-lamp-86726.html
+
+    // =======================================================================
+    // Projection Matrix
+    // =======================================================================
+    glm::mat4 projection = glm::perspective(45.0f, (GLfloat)sWidth / (GLfloat)sHeight, 1.0f, 10000.0f);
+    
+    lightShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+    /*ballShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(ballShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+    tableShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(tableShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+    cueShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(cueShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));*/
+
+    // =======================================================================
+    // Define how and where the data will be passed to the shaders
+    // =======================================================================
+    GLint lightPos = glGetUniformLocation(lightShader.Program, "lightPos");
+    GLint viewPos = glGetUniformLocation(lightShader.Program, "viewPos");
+    GLint lightCol = glGetUniformLocation(lightShader.Program, "lightColor");
+    GLint lightType = glGetUniformLocation(lightShader.Program, "lightType");
+
+    
+    // =======================================================================
     // Iterate this block while the window is open
+    // =======================================================================
     while (!glfwWindowShouldClose(window))
     {
-        // Calculate deltatime of current frame
-        currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-
         // Check and call events
         glfwPollEvents();
 
@@ -273,15 +247,8 @@ int main()
         View = glm::lookAt
         (
             glm::vec3(camLocation.x, camLocation.y, camLocation.z), // Camera is at (0,500,7000), in World Space
-            glm::vec3(0, 0, 0),      // and looking at the origin
-            glm::vec3(0, 1, 0)       // Head is up (set to 0,-1,0 to look upside-down)
-        );
-
-        lightView = glm::lookAt
-        (
-            glm::vec3(0.0f, 200.0f, 10.0f), // Camera is at (0,500,7000), in World Space
-            glm::vec3(0, 0, 0),      // and looking at the origin
-            glm::vec3(0, 1, 0)       // Head is up (set to 0,-1,0 to look upside-down)
+            glm::vec3(0, 0, 0),                                     // and looking at the origin
+            glm::vec3(0, 1, 0)                                      // Head is up (set to 0,-1,0 to look upside-down)
         );
 
         // Pass the data in the variables to to go to the vertex shader
@@ -292,11 +259,6 @@ int main()
 
         lightShader.Use();
 
-       
-
-        // 1. The View matrix first...
-        //glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(lightView));
-
         // 2. Update the projection matrix previously defined
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -305,16 +267,10 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
         // 1. The View matrix first...
-        //tableShader.Use();
-        //glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(View));
-
-        //tableShader.Use();
-        
-
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(View));
         
         //==========================================================================
-        // Draw the Table (Create the model)
+        // Draw the Table 
         //==========================================================================
         //tableShader.Use();
         glm::mat4 tableModel = glm::mat4(1);
@@ -329,10 +285,6 @@ int main()
         //==========================================================================
         // Draw CUE
         //==========================================================================
-        //cueShader.Use();
-        glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(View));
-
-        //cueShader.Use();
         glm::mat4 cueModel;
         glm::mat4 cuetip;
 
@@ -343,21 +295,13 @@ int main()
         cueModel = glm::rotate(cueModel, 0.1f, glm::vec3(0.0, 1.0, 0.0));
         cueModel = glm::translate(cueModel, glm::vec3(cueObj.x, cueObj.y, cueObj.z));
 
-
-        //transform tip to be in same location as pool cue
-        cuetip = glm::translate(cuetip, glm::vec3(cuetipObj.x, cuetipObj.y, cuetipObj.z + 20));
-
-        //cout << "TIP " <<cuetipObj.x << " " << cuetipObj.y << " " << (cuetipObj.z + 200) << endl;
-       // cout << "CUE " <<cueObj.x << " " << cueObj.y << " " << cueObj.z << endl;
-        // ...and 2. The Model matrix
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(cueModel));
         cue.Draw(lightShader);
 
         //==========================================================================
         // Draw ball
         //==========================================================================
-        //ballShader.Use();
-        glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(View));
+        glm::mat4 ballModel, ball2Model;
 
         if (cueObj.z - 2 <= ballObj.z)
         {
@@ -399,27 +343,12 @@ int main()
                 ballObj.zinc = ballObj.zinc + (ballObj.zinc * 0.30);
             if (ballObj.zinc > 0)
                 ballObj.zinc = ballObj.zinc - (ballObj.zinc * 0.30);
-
-            //cout << ballObj.xinc << " " << ballObj.zinc;
         }
 
-        
-
-
-        //cout << "ball x " << ballObj.x << " y " << ballObj.y << " z " << ballObj.z << "|" << endl;
-        //ballShader.Use();
-
-        glm::mat4 ballModel, ball2Model;
-
-        /*ballObj.x += ballObj.xinc;*/
-        
         if (!hit)
         {
             ballObj.z += ballObj.zinc;
             ballObj.x += ballObj.xinc;
-
-            
-
 
             if (hit2)
             {
@@ -463,7 +392,7 @@ int main()
             GLfloat zdif = ballObj.z - ball2Obj.z;
             GLfloat ydif = ballObj.y - ball2Obj.y;
 
-            if (sqrt((xdif * xdif) + (ydif * ydif) + (zdif * zdif)) < 5) //(ballObj.Radius + ball2Obj.Radius))
+            if (sqrt((xdif * xdif) + (ydif * ydif) + (zdif * zdif)) < 5)  
             {
                 // Once collided, repel and swap speed of translation.
                 GLfloat temp = ball2Obj.xinc;
@@ -489,13 +418,8 @@ int main()
         ballModel = glm::translate(ballModel, glm::vec3(ballObj.x, tableTop, ballObj.z));
         ball2Model = glm::translate(ball2Model, glm::vec3(ball2Obj.x, tableTop, ball2Obj.z));
 
-        //cout << "BALL " << ballObj.x << " " << ballObj.y << " " << ballObj.z << endl;
-        // ...and 2. The Model matrix
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(ballModel));
-
         ball.Draw(lightShader);
-
-        
         
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(ball2Model));
         ball2.Draw(lightShader);
@@ -503,32 +427,26 @@ int main()
         lightShader.Use();
 
         //==========================================================================
-       // Draw the Lamp (Create the model)
+       // Draw the Lamp 
        //==========================================================================
         lampShader.Use();
 
-        // 1. Define the View matrix first...
+        // View matrix
         glUniformMatrix4fv(glGetUniformLocation(lampShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(View));
 
-
-        // 2. Update the projection matrix - already defined on line 176
+        // Projection matrix
         glUniformMatrix4fv(glGetUniformLocation(lampShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-
-        // 3. Set up the scenery for world space
         glm::mat4 lampmodel = glm::mat4(1.0f);
         glUniformMatrix4fv(glGetUniformLocation(lampShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(lampmodel));
 
-
-        // 4.  Now define the lamp model (Create and display the model)
         glm::mat4 lampModel = glm::mat4(1);
         lampModel = glm::scale(lampModel, glm::vec3(0.6f));
         lampModel = glm::translate(lampModel, glm::vec3(0.0f, 1200.0f, 0.0f));
 
-        // ...and finally pass it to the world space for display.
         glUniformMatrix4fv(glGetUniformLocation(lampShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(lampModel));
 
-        // Now display the lamp model
+        // Display Lamp
         lamp.Draw(lampShader);
 
         // Swap the buffers
@@ -550,10 +468,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 
-    
-
     //CAMERA CONTROLS
-    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) // If “H” is pressed, move the camera to the coordinates’ origin
+    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) //If “H” is pressed: Reset Objects
     {
         camLocation = originalLocation;
         cueObj.z = OGcueZ;
@@ -580,27 +496,17 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         camLocation.y -= yVal;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        //cout << "pressed w : " <<camLocation.z << " |";
         camLocation.z -= zVal;
-    }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         camLocation.z += zVal;
-
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         cueObj.z += 400;
-
-    //Reset Ball spin speed and direction
-    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-        //inc = 0.001;
-
-    //camera = glm::vec3(camLocation.x, camLocation.y, camLocation.z);
 
     View = glm::lookAt
     (
         glm::vec3(camLocation.x, camLocation.y, camLocation.z), // Camera is at (0,500,7000), in World Space
-        glm::vec3(0, 0, 0),      // and looking at the origin
-        glm::vec3(0, 1, 0)       // Head is up (set to 0,-1,0 to look upside-down)
+        glm::vec3(0, 0, 0),                                     // and looking at the origin
+        glm::vec3(0, 1, 0)                                      // Head is up (set to 0,-1,0 to look upside-down)
     );
 }
 
@@ -615,6 +521,7 @@ void windowSize_callback(GLFWwindow* window, int width, int height)
 void clicked_callback(GLFWwindow* window, int button, int  action, int mode)
 {
     double xpos, ypos;
+
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) //Mouse Clicked
     {
         glfwGetCursorPos(window, &xpos, &ypos);
@@ -637,15 +544,9 @@ void clicked_callback(GLFWwindow* window, int button, int  action, int mode)
         glfwGetCursorPos(window, &xpos, &ypos);
 
         if (ypos > oldY)
-        {
-            //for (int i = 0; i < 20; i++)
                 cueObj.z += 2.0f;
-        }
         if ((ypos < oldY))
-        {
-            //for (int i = 0; i < 20; i++)
                 cueObj.z -= 2.0f;
-        }
 
         //cout << "Released : Cursor Position at (" << xpos << " : " << ypos << ")" << endl;
     }
@@ -672,34 +573,13 @@ void clickDrag_callback(GLFWwindow* window, double xPos, double yPos)
 
             firstMouse = false; //Let program know mouse is released
 
-            glfwSetCursorPosCallback(window, moveMouse_callback); //Reset to original callback for mouse movement
-
             return;
         }
     }
 }
 
-void moveMouse_callback(GLFWwindow* window, double xPos, double yPos)
-{
-    double xpos, ypos;
-
-    //mouse is not occupied with spinning earth function
-   /* if (!firstMouse)
-    {
-
-    }
-    else
-    {*/
-        //The mouse is being clicked which means click and drag Should be activated
-        glfwSetCursorPosCallback(window, clickDrag_callback);
-        return;
-    //}
-}
-
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    //cout << "yoffset " << yoffset << " xoffset " << xoffset << " | ";
-
     if (yoffset > 0) //Scrolled Foward so Move Camera in
     {
         for (int i = 0; i < 50; i++)
@@ -713,9 +593,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
     View = glm::lookAt
     (
-        glm::vec3(camLocation.x, camLocation.y, camLocation.z), // Camera is at (0,500,7000), in World Space
-        glm::vec3(0, 0, 0),      // and looking at the origin
-        glm::vec3(0, 1, 0)       // Head is up (set to 0,-1,0 to look upside-down)
+        glm::vec3(camLocation.x, camLocation.y, camLocation.z),     // Camera is at (0,500,7000), in World Space
+        glm::vec3(0, 0, 0),                                         // and looking at the origin
+        glm::vec3(0, 1, 0)                                          // Head is up (set to 0,-1,0 to look upside-down)
     );
-    //camera = glm::vec3(camLocation.x, camLocation.y, camLocation.z);
 }

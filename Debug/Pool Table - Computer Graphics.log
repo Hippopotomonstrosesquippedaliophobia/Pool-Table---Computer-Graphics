@@ -1,27 +1,19 @@
 ﻿  main.cpp
 c:\users\bronj\source\repos\pool table - computer graphics\mesh.h(88): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(99): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(100): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(101): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(142): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(234): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(262): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(366): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(384): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(386): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(399): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(64): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(65): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(66): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(104): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(283): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(385): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(387): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
 c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(401): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(438): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(440): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(453): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(455): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(470): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(471): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(474): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(475): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(629): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(684): warning C4101: 'xpos': unreferenced local variable
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(684): warning C4101: 'ypos': unreferenced local variable
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(403): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(418): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(419): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(422): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(423): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(529): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 soil.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_DXT.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
 soil.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_helper.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
 soil.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(SOIL.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
