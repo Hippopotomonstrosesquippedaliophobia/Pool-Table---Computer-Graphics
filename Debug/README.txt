@@ -20,4 +20,9 @@ Esc to exit scene
 
 
 ==========================================================================
+Utilized OpenGL and C++ in Visual Studio 2019 
+Platform toolset : Visual Studio 2015 (v140)
+Target platform version : 10.0.19041.0
+
 Created by Debronni Ifill for COMP3260 – Computer Graphics I 
+
