@@ -1,21 +1,19 @@
-/*
 //==============================================================================
 //                                PROGRAM:
 //                                Pool Table
 //==============================================================================
-
-Install the following in Package Manager :
-
-Install-Package glew_dynamic
-Install-Package glfw
-Install-Package GLMathematics
-Install-Package freeimage -version 3.16.0
-Install-Package nupengl.core
-Install-Package Soil
-Install-Package Assimp -version 3.0.0
-
-=================================================================================*/
-
+//
+//Install the following in Package Manager 
+//
+//Install-Package glew_dynamic
+//Install-Package glfw
+//Install-Package GLMathematics
+//Install-Package freeimage -version 3.16.0
+//Install-Package nupengl.core
+//Install-Package Soil
+//Install-Package Assimp -version 3.0.0
+//
+//=================================================================================
 // GLEW
 #include <GL/glew.h>
 
@@ -32,20 +30,6 @@ Install-Package Assimp -version 3.0.0
 #include "camera.h"
 #include "model.h"
 
-//========= Prototype function for call back ===============================
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
-void windowSize_callback(GLFWwindow* window, int width, int height);
-
-void clicked_callback(GLFWwindow* window, int button, int  action, int mode);
-
-void clickDrag_callback(GLFWwindow* window, double xPos, double yPos);
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-//==========================================================================
-
-#define ballCount 1
-
 // Active window
 GLFWwindow* window;
 
@@ -61,9 +45,9 @@ Camera camera(camLocation);
 glm::mat4 View;
 
 // Light attributes
-glm::vec3 lightPos(0,0,0);      // Light location
-glm::vec3 lightColor(1.0f, 1.0f, 1.0f);             // White light
-glm::vec3 lightMode(2.0f); //2 is diffuse lighting, 1 is global light, 4 mix of all
+glm::vec3 lightPos(0.0f, 0.0f, 0.0f);                  // Light location
+glm::vec3 lightColor(1.0f, 1.0f, 1.0f);     // White light
+glm::vec3 lightMode(2.0f);                  //2 is diffuse lighting, 1 is global light, 4 mix of all
 
 //Variables increments for resetting the camera's coordinates
 GLfloat xVal = 700.0f;
@@ -71,7 +55,7 @@ GLfloat yVal = 700.0f;
 GLfloat zVal = 700.0f;
 
 //OBJECTS
-struct objects
+struct objects 
 {
     GLfloat x = 0.0;
     GLfloat y = 500.0;
@@ -85,32 +69,29 @@ struct objects
     GLfloat inc = 0.001f;
 } ballObj, cueObj, cuetipObj, tableObj, ball2Obj;
 
-//Mouse
+//Mouse Variables
 double oldX, oldY;
 bool firstMouse = false;
 
-// Define vector to hold the astroids
-vector <Model> balls;
-vector <objects> objs;
 
+//Environmental Boundaries
 GLfloat groundLevel = 0.0f;
 GLfloat tableTop = 40.0f;
 
-//Boundaries on table
-GLfloat tableback = -110.0f;
-GLfloat tablefront = 110.0f; //Symmetrical boundary
-GLfloat tableleft = -45.0f;
-GLfloat tableright = tableleft * -1; //Symmetrical boundary
-
-GLfloat radius = 20.0f;            // ball radius
-GLfloat offset = 1.5f;
-
+GLfloat tableback = -110.0f;    //Farthest away at start
+GLfloat tablefront = 110.0f;    //Closest to camera at start
+GLfloat tableleft = -45.0f;     
+GLfloat tableright = 45.0f;      
+ 
+//Discover if ball 1 and ball 2 have been hit yet. Starts true for logic purposes
 bool hit = true;
 bool hit2 = true;
 
+
+//Original locations & incrementors of objects
 GLfloat OGcueZ = 50.0f;
 GLfloat OGcueY = 40.0f;
-GLfloat OGcueX = -4.0f; // was 0.0
+GLfloat OGcueX = -4.0f;  
 
 GLfloat OGballz = 43.0f;
 GLfloat OGballx = 0.0f;
@@ -121,6 +102,28 @@ GLfloat OGball2z = -30.0f;
 GLfloat OGball2x = -35.0f;
 GLfloat OGball2zinc = 1.5;
 GLfloat OGball2xinc = 1.4;
+
+//=================== Prototype function for call back ======================== 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+
+void windowSize_callback(GLFWwindow* window, int width, int height);
+
+void clicked_callback(GLFWwindow* window, int button, int  action, int mode);
+
+void clickDrag_callback(GLFWwindow* window, double xPos, double yPos);
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+//==============================================================================
+
+//=================== Prototype functions for modular functions ======================== 
+void tableCollision(objects& obj);
+
+void ballsCollision(objects& obj1, objects& obj2);
+
+void pocketCollision(objects& obj);
+
+void reset();
+//=======================================================================================
 
 void init_Resources()
 {
@@ -160,6 +163,7 @@ void init_Resources()
 }
 
 
+
 // The MAIN function, from here we start our application and run the loop
 int main()
 {
@@ -168,32 +172,11 @@ int main()
     // ==============================================
     // ====== Set up our Objects =======
     // ==============================================
-    tableObj.y = 0; //Reset Table Y Axis Since its sitting on the floor
-
-    ballObj.z = OGballz;
-    ballObj.x = OGballx;
-    ballObj.zinc = OGballzinc;
-    ballObj.xinc = OGballxinc;
-
-    ball2Obj.z = OGball2z;
-    ball2Obj.x = OGball2x;
-    ball2Obj.zinc = OGball2zinc;
-    ball2Obj.xinc = OGball2xinc;
-
-    hit = true;
-    hit2 = false;
-
-    //cue
-    cueObj.z = OGcueZ;
-    cueObj.y = OGcueY;
-    cueObj.x = OGcueX;
+    reset(); //Place objects in original locations
 
     // =======================================================================
     // Shaders
     // =======================================================================
-   /* Shader ballShader("objects/ballVertex.glsl", "objects/ballFragment.glsl");
-    Shader tableShader("objects/pooltableVertex.glsl", "objects/pooltableFragment.glsl");
-    Shader cueShader("objects/poolcueVertex.glsl", "objects/poolcueFragment.glsl");*/
     Shader lampShader("objects/lampVertex.glsl", "objects/lampFragment.glsl");
     Shader lightShader("objects/lightVertex.glsl", "objects/lightFragment.glsl");
 
@@ -213,15 +196,6 @@ int main()
     
     lightShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    /*ballShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(ballShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    tableShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(tableShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    cueShader.Use();
-    glUniformMatrix4fv(glGetUniformLocation(cueShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));*/
 
     // =======================================================================
     // Define how and where the data will be passed to the shaders
@@ -259,20 +233,19 @@ int main()
 
         lightShader.Use();
 
+        // 1. The View matrix first...
+        glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(View));
+
         // 2. Update the projection matrix previously defined
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         // 3. Set up the scenery for world space
         glm::mat4 model = glm::mat4(1.0f);
         glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
-        // 1. The View matrix first...
-        glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(View));
-        
+                
         //==========================================================================
         // Draw the Table 
-        //==========================================================================
-        //tableShader.Use();
+        //========================================================================== 
         glm::mat4 tableModel = glm::mat4(1);
 
         tableModel = glm::scale(tableModel, glm::vec3(5.0f));
@@ -311,102 +284,39 @@ int main()
                 ballObj.z += ballObj.zinc;
                 hit = false;
             }
-        }
-          
-        //BALL 1
-        if (ballObj.x >= tableright || ballObj.x <= tableleft)
-        {
-            ballObj.xinc *= -1;
+        } 
 
-            if (ballObj.x > 0)
-                ballObj.x = tableright;
-            if (ballObj.x < 0)
-                ballObj.x = tableleft;
+        objects* ptr = &ballObj; //Pointer to ballObj
+        objects* ptr2 = &ball2Obj; //Pointer to ball2Obj
 
-            //Decay movement of ball
-            if (ballObj.xinc < 0)
-                ballObj.xinc = ballObj.xinc + (ballObj.xinc * 0.18);
-            if (ballObj.xinc > 0)
-                ballObj.xinc = ballObj.xinc - (ballObj.xinc * 0.18);
-        }
-        if (ballObj.z >= tablefront || ballObj.z <= tableback)
-        {
-            ballObj.zinc *= -1;
+        //BALL 1 - Check for Pocketed Ball
+        pocketCollision(*ptr);
 
-            if (ballObj.z > 0)
-                ballObj.z = tablefront;
-            if (ballObj.z < 0)
-                ballObj.z = tableback;
+       //Ball 2 - Check for Pocketed Ball
+        pocketCollision(*ptr2);         
 
-            //Decay movement of ball
-            if (ballObj.zinc < 0)
-                ballObj.zinc = ballObj.zinc + (ballObj.zinc * 0.30);
-            if (ballObj.zinc > 0)
-                ballObj.zinc = ballObj.zinc - (ballObj.zinc * 0.30);
-        }
+        //Ball 1 Check for collisions on left or right of table
+        tableCollision(*ptr); //Change ballObj values by reference
 
+        //Check if ball hit came and went and commence ball movement
         if (!hit)
         {
             ballObj.z += ballObj.zinc;
             ballObj.x += ballObj.xinc;
 
+            //Check for Ball 2 to be hit to commence movement
             if (hit2)
             {
-                //BALL 2
-                if (ball2Obj.x >= tableright || ball2Obj.x <= tableleft)
-                {
-                    ball2Obj.xinc *= -1;
-
-                    if (ball2Obj.x > 0)
-                        ball2Obj.x = tableright;
-                    if (ball2Obj.x < 0)
-                        ball2Obj.x = tableleft;
-
-                    //Decay movement of ball
-                    if (ball2Obj.xinc < 0)
-                        ball2Obj.xinc = ball2Obj.xinc + (ball2Obj.xinc * 0.18);
-                    if (ball2Obj.xinc > 0)
-                        ball2Obj.xinc = ball2Obj.xinc - (ball2Obj.xinc * 0.18);
-                }
-                if (ball2Obj.z >= tablefront || ball2Obj.z <= tableback)
-                {
-                    ball2Obj.zinc *= -1;
-
-                    if (ball2Obj.z > 0)
-                        ball2Obj.z = tablefront;
-                    if (ball2Obj.z < 0)
-                        ball2Obj.z = tableback;
-
-                    //Decay movement of ball
-                    if (ball2Obj.zinc < 0)
-                        ball2Obj.zinc = ball2Obj.zinc + (ball2Obj.zinc * 0.30);
-                    if (ball2Obj.zinc > 0)
-                        ball2Obj.zinc = ball2Obj.zinc - (ball2Obj.zinc * 0.30);
-                }
+                //BALL 2 - Table Collision code
+                tableCollision(*ptr2); //Change ball2Obj values by reference
 
                 ball2Obj.x += ball2Obj.xinc;
                 ball2Obj.z += ball2Obj.zinc;
             }
 
-            GLfloat xdif = ballObj.x - ball2Obj.x;
-            GLfloat zdif = ballObj.z - ball2Obj.z;
-            GLfloat ydif = ballObj.y - ball2Obj.y;
+            ballsCollision(*ptr, *ptr2); //Sets ball 2 hit boolean to true to let it know to commence moving
 
-            if (sqrt((xdif * xdif) + (ydif * ydif) + (zdif * zdif)) < 5)  
-            {
-                // Once collided, repel and swap speed of translation.
-                GLfloat temp = ball2Obj.xinc;
-                ball2Obj.xinc = (ball2Obj.xinc * 0.90) * -1;
-                ballObj.xinc = (ballObj.xinc * 0.85) * -1;
-
-                temp = ball2Obj.zinc;
-                ball2Obj.zinc = (ball2Obj.zinc * 0.85 ) * -1;
-                ballObj.zinc = (ballObj.zinc * 0.80) * -1;
-
-                hit2 = true;
-            }
-
-            hit = false;
+            hit = false; //reset hit
         }
 
         ballModel = glm::mat4(1);        
@@ -427,8 +337,8 @@ int main()
         lightShader.Use();
 
         //==========================================================================
-       // Draw the Lamp 
-       //==========================================================================
+        // Draw the Lamp 
+        //==========================================================================
         lampShader.Use();
 
         // View matrix
@@ -458,10 +368,109 @@ int main()
     return 0;
 }
 
+//=====================  Modular Functions  ===============================
+void tableCollision(objects& obj)
+{
+    if (obj.x >= tableright || obj.x <= tableleft)
+    {
+        obj.xinc *= -1;
 
-// -------------------------------------------------------------------------
-// Process keyboard inputs
-// -------------------------------------------------------------------------
+        if (obj.x > 0)
+            obj.x = tableright;
+        if (obj.x < 0)
+            obj.x = tableleft;
+
+        //Decay movement of ball
+        if (obj.xinc < 0)
+            obj.xinc = obj.xinc + (obj.xinc * 0.18);
+        if (obj.xinc > 0)
+            obj.xinc = obj.xinc - (obj.xinc * 0.18);
+    }
+    //Ball 1 Check for collisions front or back of table
+    if (obj.z >= tablefront || obj.z <= tableback)
+    {
+        obj.zinc *= -1;
+
+        if (obj.z > 0)
+            obj.z = tablefront;
+        if (obj.z < 0)
+            obj.z = tableback;
+
+        //Decay movement of ball
+        if (obj.zinc < 0)
+            obj.zinc = obj.zinc + (obj.zinc * 0.30);
+        if (obj.zinc > 0)
+            obj.zinc = obj.zinc - (obj.zinc * 0.30);
+    }
+}
+
+void ballsCollision(objects& obj1, objects& obj2)
+{
+    GLfloat xdif = obj1.x - obj2.x;
+    GLfloat zdif = obj1.z - obj2.z;
+    GLfloat ydif = obj1.y - obj2.y;
+
+
+    if (sqrt((xdif * xdif) + (ydif * ydif) + (zdif * zdif)) < 5)
+    {
+        // Once collided, repel and swap speed of translation.
+        GLfloat temp = obj2.xinc;
+        obj2.xinc = (obj2.xinc * 0.90) * -1;
+        obj1.xinc = (obj1.xinc * 0.85) * -1;
+
+        temp = obj2.zinc;
+        obj2.zinc = (obj2.zinc * 0.85) * -1;
+        obj1.zinc = (obj1.zinc * 0.80) * -1;
+
+        hit2 = true;
+    }
+}
+
+void pocketCollision(objects& obj)
+{
+    if ((obj.x >= tableright - 5) && (obj.z <= tableback + 5))                                          // back (farthest away) right hole
+        cout << "Hit back right pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+
+    if ((obj.x <= tableleft + 5) && (obj.z <= tableback + 5))                                           // back (farthest away) left hole
+        cout << "Hit back left pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+
+    if (((obj.x >= tableright) || (obj.x <= tableleft)) && ((obj.z >= 0 - 2) && (obj.z <= 0 + 2)))      // Center Hole
+        cout << "Hit center left or right pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+
+    if ((obj.x >= tableright - 5) && (obj.z >= tablefront - 5))                                         // front right hole
+        cout << "Hit front right pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+
+    if ((obj.x <= tableleft + 5) && (obj.z >= tablefront - 5))                                          // front left hole
+        cout << "Hit front left pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+}
+
+void reset()
+{
+    camLocation = originalLocation;
+    tableObj.y = 0; //Reset Table Y Axis Since its sitting on the floor
+
+    ballObj.z = OGballz;
+    ballObj.x = OGballx;
+    ballObj.zinc = OGballzinc;
+    ballObj.xinc = OGballxinc;
+
+    ball2Obj.z = OGball2z;
+    ball2Obj.x = OGball2x;
+    ball2Obj.zinc = OGball2zinc;
+    ball2Obj.xinc = OGball2xinc;
+
+    hit = true;
+    hit2 = false;
+
+    //cue
+    cueObj.z = OGcueZ;
+    cueObj.y = OGcueY;
+    cueObj.x = OGcueX;
+}
+//=========================================================================
+
+
+//=====================  Callback Functions  ===============================
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
     // If ESC is pressed, close the window
@@ -470,23 +479,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     //CAMERA CONTROLS
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) //If “H” is pressed: Reset Objects
-    {
-        camLocation = originalLocation;
-        cueObj.z = OGcueZ;
-        ballObj.z = OGballz;
-        ballObj.x = OGballx;
-        ballObj.zinc = OGballzinc;
-        ballObj.xinc = OGballxinc;
-
-        ball2Obj.z = OGball2z;
-        ball2Obj.x = OGball2x;
-        ball2Obj.zinc = OGball2zinc;
-        ball2Obj.xinc = OGball2xinc;
-
-        hit = true;
-        hit2 = false;
-    }
-
+        reset();
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         camLocation.x -= xVal;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
@@ -598,3 +591,5 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
         glm::vec3(0, 1, 0)                                          // Head is up (set to 0,-1,0 to look upside-down)
     );
 }
+
+//=========================================================================
