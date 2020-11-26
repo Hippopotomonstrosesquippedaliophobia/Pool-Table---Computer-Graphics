@@ -1,19 +1,21 @@
 ﻿  main.cpp
 c:\users\bronj\source\repos\pool table - computer graphics\mesh.h(88): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(65): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(66): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(67): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(316): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(426): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(428): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(442): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(444): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(465): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(466): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(469): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(470): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(538): warning C4305: '=': truncation from 'double' to 'GLfloat'
-c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(602): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\program files (x86)\windows kits\10\include\10.0.19041.0\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  c:\users\bronj\source\repos\pool table - computer graphics\packages\nupengl.core.0.1.0.1\build\native\include\glfw\glfw3.h(92): note: see previous definition of 'APIENTRY'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(70): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(71): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(72): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(321): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(433): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(435): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(449): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(451): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(472): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(473): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(476): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(477): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(563): warning C4305: '=': truncation from 'double' to 'GLfloat'
+c:\users\bronj\source\repos\pool table - computer graphics\main.cpp(627): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 soil.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_DXT.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
 soil.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(image_helper.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info
 soil.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'soil.lib(SOIL.obj)' or at 'C:\Users\Bronj\source\repos\Pool Table - Computer Graphics\Debug\SOIL.pdb'; linking object as if no debug info

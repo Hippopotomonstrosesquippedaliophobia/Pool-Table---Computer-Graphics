@@ -30,6 +30,11 @@
 #include "camera.h"
 #include "model.h"
 
+//Sound effects - Windows - comment out if this breaks on Mac
+#include<Windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+
 // Active window
 GLFWwindow* window;
 
@@ -324,10 +329,12 @@ int main()
         objects* ptr2 = &ball2Obj;  // Pointer to ball2Obj
 
         // BALL 1 - Check for Pocketed Ball
-        pocketCollision(*ptr);
+        if (!pcketBall1)
+            pocketCollision(*ptr);
 
        // Ball 2 - Check for Pocketed Ball
-        pocketCollision(*ptr2);         
+        if (!pcketBall2)
+            pocketCollision(*ptr2);         
 
         // Ball 1 Check for collisions on left or right of table
         tableCollision(*ptr); //Change ballObj values by reference
@@ -470,6 +477,9 @@ void ballsCollision(objects& obj1, objects& obj2)
             obj1.zinc = (obj1.zinc * 0.80) * -1;
 
             hit2 = true;
+
+            //Plays noise on windows
+            sndPlaySound(TEXT("audio/poolbreak.wav"), SND_ASYNC);
         }
     }
 }
@@ -481,30 +491,45 @@ void pocketCollision(objects& obj)
         if (obj.name == "ball1") pcketBall1 = true;
         else if (obj.name == "ball2") pcketBall2 = true;
         // cout << "Hit back right pocket " << obj.x << " " << obj.y << " " << obj.z << endl; 
+
+        //Plays noise on windows
+        sndPlaySound(TEXT("audio/poolpocket.wav"), SND_ASYNC);
     }
     if ((obj.x <= tableleft + 5) && (obj.z <= tableback + 5))                                           // back (farthest away) left hole
     {
         if (obj.name == "ball1") pcketBall1 = true;
         else if (obj.name == "ball2") pcketBall2 = true;
         // cout << "Hit back left pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+
+        //Plays noise on windows
+        sndPlaySound(TEXT("audio/poolpocket.wav"), SND_ASYNC);
     }
     if (((obj.x >= tableright) || (obj.x <= tableleft)) && ((obj.z >= 0 - 2) && (obj.z <= 0 + 2)))      // Center Hole
     {
         if (obj.name == "ball1") pcketBall1 = true;
         else if (obj.name == "ball2") pcketBall2 = true;
         // cout << "Hit center left or right pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+
+        //Plays noise on windows
+        sndPlaySound(TEXT("audio/poolpocket.wav"), SND_ASYNC);
     }
     if ((obj.x >= tableright - 5) && (obj.z >= tablefront - 5))                                         // front right hole
     {
         if (obj.name == "ball1") pcketBall1 = true;
         else if (obj.name == "ball2") pcketBall2 = true;
         // cout << "Hit front right pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+
+        //Plays noise on windows
+        sndPlaySound(TEXT("audio/poolpocket.wav"), SND_ASYNC);
     }
     if ((obj.x <= tableleft + 5) && (obj.z >= tablefront - 5))                                          // front left hole
     {
         if (obj.name == "ball1") pcketBall1 = true;
         else if (obj.name == "ball2") pcketBall2 = true;
         // cout << "Hit front left pocket " << obj.x << " " << obj.y << " " << obj.z << endl;
+
+        //Plays noise on windows
+        sndPlaySound(TEXT("audio/poolpocket.wav"), SND_ASYNC);
     }
 }
 
